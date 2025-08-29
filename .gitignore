@@ -3,6 +3,13 @@
 /node_modules
 /build
 
+# Yarn PnP files (if accidentally generated)
+.pnp.*
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+
 # Logs
 logs
 *.log
@@ -54,3 +61,5 @@ pids
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+/generated/prisma
