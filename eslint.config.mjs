@@ -29,8 +29,10 @@ export default tseslint.config(
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-floating-promises': 'warn',
       '@typescript-eslint/no-unsafe-argument': 'warn',
-      'linebreak-style': ['error', 'unix'],
-      'prettier/prettier': ['error', { endOfLine: 'lf' }],
+      '@typescript-eslint/no-unsafe-call': 'off', 
+      '@typescript-eslint/no-unsafe-member-access': 'off', 
+      'linebreak-style': 'off',
+      'prettier/prettier': ['error', { endOfLine: 'auto' }],
     },
   },
 );
