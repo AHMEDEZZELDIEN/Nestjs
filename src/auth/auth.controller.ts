@@ -2,11 +2,12 @@ import { Controller, Post, Body, UseInterceptors } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto } from './dto';
 import { UserResponseDto } from './dto/user-response.dto';
-import { AuthResponseDto } from './dto/auth-response.dto';
-import { TransformInterceptor } from '../common/interceptors/transform.interceptor';
+import { AuthDataDto } from './dto/auth-data.dto';
+import { ResponseBuilder, ApiResponseInterceptor } from '../common';
 import { PrismaService } from 'src/prisma/prisma.service';
 
-@Controller('v1/user')
+@Controller('api/v1/user')
+@UseInterceptors(ApiResponseInterceptor)
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
@@ -14,18 +15,33 @@ export class AuthController {
   ) {}
 
   @Post('login')
-  @UseInterceptors(new TransformInterceptor(AuthResponseDto))
   async login(@Body() req: LoginDto) {
-    const user = await this.authService.login(req);
+    const { user, token } = await this.authService.login(req);
     const userResponse = Object.assign(new UserResponseDto(), user);
-    return new AuthResponseDto(userResponse, 'Login successful');
+    return {
+      token: token,
+      type: 'Bearer',
+      user: userResponse,
+    };
   }
 
   @Post('register')
-  @UseInterceptors(new TransformInterceptor(AuthResponseDto))
   async register(@Body() req: RegisterDto) {
-    const user = await this.authService.register(req);
+    const { user, token } = await this.authService.register(req);
     const userResponse = Object.assign(new UserResponseDto(), user);
-    return new AuthResponseDto(userResponse, 'Registration successful');
+    return {
+      token: token,
+      type: 'Bearer',
+      user: userResponse,
+    };
+  }
+
+  @Post('me')
+  async getMe(@Body() req: any) {
+    const user = await this.authService.getMe(req);
+    const userResponse = Object.assign(new UserResponseDto(), user);
+    return {
+      user: userResponse,
+    };
   }
 }

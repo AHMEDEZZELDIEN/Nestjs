@@ -45,3 +45,14 @@ model Bookmark {
 
   @@map("bookmarks")
 }
+
+model vectorDocument {
+  id           String   @id @default(uuid()) @db.Uuid
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  content          String  @db.Text
+  meta_data      Json?   // Store metadata as JSON
+  
+  embeddings Unsupported("vector(1024)")?
+}

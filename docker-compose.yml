@@ -1,8 +1,6 @@
-version: '3.8'
-
 services:
   postgres:
-    image: postgres:15
+    image: pgvector/pgvector:pg15
     container_name: nestjs-postgres
     restart: unless-stopped
     environment:
@@ -14,6 +12,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./init-db:/docker-entrypoint-initdb.d
     networks:
       - nestjs-network
     healthcheck:
@@ -22,23 +21,6 @@ services:
       timeout: 10s
       retries: 3
 
-  nestjs-app:
-    build: .
-    container_name: nestjs-app
-    restart: unless-stopped
-    ports:
-      - "3000:3000"
-    environment:
-      DATABASE_HOST: postgres
-      DATABASE_PORT: 5432
-      DATABASE_USER: nestjs_user
-      DATABASE_PASSWORD: nestjs_password
-      DATABASE_NAME: nestjs_db
-    depends_on:
-      postgres:
-        condition: service_healthy
-    networks:
-      - nestjs-network
 
 volumes:
   postgres_data:

@@ -14,6 +14,12 @@ export class UserResponseDto {
   phone?: string;
 
   @Expose()
+  type: string;
+
+  @Expose()
+  type_name: string;
+
+  @Expose()
   @Transform(({ value }) => {
     if (value instanceof Date) {
       return value.toISOString();
@@ -30,6 +36,4 @@ export class UserResponseDto {
     return new Date(value as string | number).toISOString();
   })
   updatedAt: string;
-
-  // Note: password is excluded by default since it's not marked with @Expose()
 }
